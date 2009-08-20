@@ -1,0 +1,9 @@
+*~
+*#*
+.DS*
+*.pyc
+*.pyd
+doc/
+build/
+dist/
+mongodbobject.egg-info/

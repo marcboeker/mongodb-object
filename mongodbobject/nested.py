@@ -1,6 +1,10 @@
 class Nested(object):
 	"""Nested represents a dumb object, that converts a given dict 
-	to internal attributes.
+	to internal attributes. There are several ways to map a dict to
+	an object.
+	
+	This one is based on my question at stackoverflow:
+	http://stackoverflow.com/questions/1305532/convert-python-dict-to-object
 	"""
 	
 	

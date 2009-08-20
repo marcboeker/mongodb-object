@@ -17,7 +17,7 @@ class Doc(object):
 	def __getattr__(self, key):
 		"""Return value from data attribute.
 		"""
-		
+
 		return getattr(self.__dict__['_data'], key)
 
 	def __setattr__(self, key, value):
@@ -33,7 +33,12 @@ class Doc(object):
 		"""Public wrapper for converting an Nested object into a dict.
 		"""
 		
-		return self.__to_dict(self.__dict__['_data'])
+		dict = self.__to_dict(self.__dict__['_data'])
+
+		if hasattr(self.__dict__['_data'], '_id'):
+		    dict['_id'] = getattr(self.__dict__['_data'], '_id')
+
+		return dict
 	
 	def __to_dict(self, obj):
 		"""Iterate over the nested object and convert it to an dict.
@@ -87,7 +92,7 @@ class Doc(object):
 		"""Save document to collection. 
 		If document is new, set generated ID to	document _id.
 		"""
-		
+		print "jj", self.to_dict()
 		self.__dict__['_data']._id = self._db[self._collection].save(self.to_dict())
 		
 	def delete(self):

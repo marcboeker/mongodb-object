@@ -26,7 +26,7 @@ class Collection:
 		
 		return Doc(self, data)
 			
-	def __parse_query(self, kwargs):
+	def _parse_query(self, kwargs):
 		"""Parse argument list into mongo query. 
 		
 		Examples:
@@ -55,7 +55,7 @@ class Collection:
 			q[key] = v
 		return q
 			
-	def __parse_update(self, kwargs):
+	def _parse_update(self, kwargs):
 		"""Parse update arguments into mongo update dict.
 		
 		Examples:
@@ -81,10 +81,10 @@ class Collection:
 				k = k.replace(op + '__', '')
 				
 				# append values to operator list (group operators)
-				if not op_list.has_key(cond):
-					op_list[cond] = []
+				if not op_list.has_key(op):
+					op_list[op] = []
 
-				op_list[cond].append((k, v))
+				op_list[op].append((k, v))
 			# simple value assignment
 			else:
 				q[k] = v
@@ -101,11 +101,12 @@ class Collection:
 		documents by unique key.
 		"""
 		
-		return Doc(
-			self, 
-			self._db[self._name].find_one(
-				self.__parse_query(kwargs)).to_dict()
-			)
+		docs = self._db[self._name].find_one(self._parse_query(kwargs))
+		
+		if docs is None:
+		    return None
+		
+		return Doc(self, docs.to_dict())
 		
 	def query(self, **kwargs):
 		"""This method is used to first say which documents should be
@@ -129,11 +130,11 @@ class Collection:
 			def update(self, **kwargs):
 				self._db[self._collection].update(
 					self.__query, 
-					self.__parse_update(kwargs)
+					self._parse_update(kwargs)
 				)
 	
 		# return handler
-		return RemoveUpdateHandler(self, self.__parse_query(kwargs))
+		return RemoveUpdateHandler(self, self._parse_query(kwargs))
 	
 	def find(self, **kwargs):
 		"""Find documents based on query using the django query syntax.
@@ -141,6 +142,6 @@ class Collection:
 		"""
 		
 		return DocList(
-			self._name, 
-			self._db[self._name].find(self.__parse_query(kwargs))
+			self, 
+			self._db[self._name].find(self._parse_query(kwargs))
 		)

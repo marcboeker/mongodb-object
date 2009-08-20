@@ -29,7 +29,7 @@ except ImportError:
 
 version = 0.1
 
-f = open("README.rst")
+f = open("README.md")
 try:
     try:
         readme_content = f.read()
@@ -63,6 +63,7 @@ class GenerateDoc(Command):
 Please ask in the user forums for help.
 """
 
+# thanks to mike from mongodb for the setup.py template
 setup(
     name="mongodbobject",
     version=version,

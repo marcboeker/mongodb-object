@@ -1,3 +1,5 @@
+from doc import Doc
+
 class DocList:
 	"""Represents a list of documents that are iteratable. 
 	Objectifying the documents is lazy. Every doc gets converted to 
@@ -60,4 +62,3 @@ class DocList:
 			return Doc(self._collection, self._items.next().to_dict())
 		except:
 			raise StopIteration
-

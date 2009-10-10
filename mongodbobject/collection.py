@@ -145,3 +145,21 @@ class Collection:
 			self, 
 			self._db[self._name].find(self._parse_query(kwargs))
 		)
+		
+	# thanks to andrew trusty
+	def find_one(self, **kwargs):
+	       """Find one single document. Mainly this is used to retrieve
+	       documents by unique key.
+	       """
+
+	       if '_id' in kwargs:
+	           args = pymongo.objectid.ObjectId(str(kwargs['_id']))
+	       else:
+	           args = self._parse_query(kwargs)
+
+	       docs = self._db[self._name].find_one(args)
+
+	       if docs is None:
+	           return None
+
+	       return Doc(self, docs.to_dict())

@@ -1,5 +1,6 @@
 from pymongo.dbref import DBRef
 from nested import Nested
+from platform import python_version
 
 class Doc(object):
 	"""The Doc class represents a single document and its features.
@@ -92,7 +93,7 @@ class Doc(object):
 		"""Save document to collection. 
 		If document is new, set generated ID to	document _id.
 		"""
-		print "jj", self.to_dict()
+
 		self.__dict__['_data']._id = self._db[self._collection].save(self.to_dict())
 		
 	def delete(self):
@@ -110,5 +111,11 @@ class Doc(object):
 		
 		if not hasattr(self.__dict__['_data'], '_id'):
 			return 'Doc(id=<not_saved>)'
-			
-		return 'Doc(id={0})'.format(self.__dict__['_data']._id.url_encode())
+		
+		# use format for python versions above 2.5
+		if map(int, python_version().split('.')) < [2, 6, 0]:
+			return 'Doc(id=%s)' % self.__dict__['_data']._id.url_encode()
+		else:
+			return 'Doc(id={0})'.format(
+				self.__dict__['_data']._id.url_encode()
+			)

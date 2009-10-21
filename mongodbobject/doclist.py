@@ -59,6 +59,6 @@ class DocList:
 		"""
 		
 		try:
-			return Doc(self._collection, self._items.next().to_dict())
+			return Doc(self._collection, self._items.next())
 		except:
 			raise StopIteration
